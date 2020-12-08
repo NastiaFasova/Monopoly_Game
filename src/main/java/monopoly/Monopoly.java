@@ -2,9 +2,9 @@ package monopoly;
 
 import lombok.Data;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collectors;
 
 @Data
 public class Monopoly {
@@ -82,9 +82,67 @@ public class Monopoly {
     public List<Player> getInfoAboutGame() {
         for (Player player : players) {
             System.out.println("Name: " + player.getName());
-            System.out.println("PropertyCard: " + player.getPropertyCard());
-            System.out.println("ChanceCard: " + player.getChanceCard());
+            System.out.println("PropertyCard: " + player.getPropertyCards());
+            System.out.println("ChanceCard: " + player.getChanceCards());
         }
         return players;
+    }
+
+    public double getPriceOfAllProperties() {
+        return getProperties()
+                .stream()
+                .map(PropertyCard::getPrice)
+                .reduce(0,Integer::sum);
+    }
+
+    public PropertyCard getTheMostExpensivePropertyCard() {
+        return getProperties()
+                .stream()
+                .max(Comparator.comparing(PropertyCard::getPrice))
+                .orElseThrow(RuntimeException::new);
+    }
+
+    public PropertyCard getTheCheapestPropertyCard() {
+        return getProperties()
+                .stream()
+                .min(Comparator.comparing(PropertyCard::getPrice))
+                .orElseThrow(RuntimeException::new);
+    }
+
+    public Double getTheAveragePriceOfPropertyCards() {
+        return getProperties()
+                .stream()
+                .mapToDouble(PropertyCard::getPrice)
+                .average()
+                .orElseThrow(RuntimeException::new);
+    }
+
+    public Map<String, List<PropertyCard>> getAppropriateCards(int lowBound, int upperBound) {
+        Map<String, List<PropertyCard>> map = new HashMap<>();
+        List<PropertyCard> cards = getProperties()
+                .stream()
+                .filter(e -> e.getGain() >= lowBound)
+                .filter(e -> e.getGain() <= upperBound)
+                .collect(Collectors.toList());
+        map.put("Fits", cards);
+        List<PropertyCard> restOfCards = getProperties()
+                .stream()
+                .filter(e -> !cards.contains(e))
+                .collect(Collectors.toList());
+        map.put("Don't fit", restOfCards);
+        map.forEach((k, v) -> System.out.println(k + ": " + v));
+        return map;
+    }
+
+    public Integer getTheMostRapidPropertyCardAmongPlayers() {
+        List<Integer> mostRapidGainOfPropertyCard = players
+                .stream()
+                .flatMap(b -> b.getPropertyCards().stream())
+                .map(PropertyCard::getGain)
+                .collect(Collectors.toList());
+
+        return mostRapidGainOfPropertyCard.stream()
+                .reduce(BinaryOperator.maxBy(Comparator.comparingInt(o
+                        -> Collections.frequency(mostRapidGainOfPropertyCard, o)))).orElse(null);
     }
 }

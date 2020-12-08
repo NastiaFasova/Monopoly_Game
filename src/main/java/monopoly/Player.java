@@ -2,25 +2,32 @@ package monopoly;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Player {
     private String name;
-    private PropertyCard propertyCard;
-    private ChanceCard chanceCard;
+    private List<PropertyCard> propertyCards;
+    private List<ChanceCard> chanceCards;
 
     public Player(String name) {
         this.name = name;
     }
 
+    public Player(String name, List<PropertyCard> propertyCards) {
+        this.name = name;
+        this.propertyCards = propertyCards;
+    }
+
     public PropertyCard getProperty() {
         List<PropertyCard> propertyCards = PropertyCard.getPropertyCards();
         PropertyCard card = propertyCards.get((int) (Math.random() * (propertyCards.size()) - 1) + 1);
-        setPropertyCard(card);
+        propertyCards.add(card);
         return card;
     }
 
@@ -30,12 +37,15 @@ public class Player {
     }
 
     public List<Card> getInfoAboutPlayer() {
-        List<Card> cards = new ArrayList<>();
-        cards.add(getPropertyCard());
-        cards.add(getChanceCard());
+        List<Card> cards = new ArrayList<>(getPropertyCards());
+        cards.addAll(chanceCards);
         System.out.println("Name: " + getName());
-        System.out.println("PropertyCard: " + getPropertyCard().getDescription());
-        System.out.println("ChanceCard: " + getChanceCard().getDescription());
+        propertyCards.forEach(System.out::println);
+        chanceCards.forEach(System.out::println);
         return cards;
+    }
+
+    public List<PropertyCard> getPropertiesOfPlayer() {
+        return propertyCards;
     }
 }

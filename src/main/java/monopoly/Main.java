@@ -27,14 +27,26 @@ public class Main {
 
         //Use of concatenation of different types
         System.out.println(game.getPropertiesByIndex(1));
+
+        System.out.println("The average price of propertyCards: "
+                + game.getTheAveragePriceOfPropertyCards());
+        System.out.println("The overall price of all properties: "
+                + game.getPriceOfAllProperties());
+        System.out.println("The cheapest propertyCard: "
+                + game.getTheCheapestPropertyCard());
+        System.out.println("The most expensive propertyCard: "
+                + game.getTheMostExpensivePropertyCard());
+        System.out.println("The most famous gain of property Card:  "
+                + game.getTheMostRapidPropertyCardAmongPlayers());
+        game.getAppropriateCards(50, 150);
     }
 
     private static List<Player> getPlayers() {
         List<PropertyCard> propertyCards = PropertyCard.getPropertyCards();
         List<ChanceCard>  chanceCards = ChanceCard.getChanceCards();
-        Player firstPlayer = new Player("Nazar", propertyCards.get(1), chanceCards.get(1));
-        Player secondPlayer = new Player("Oleh", propertyCards.get(2), chanceCards.get(2));
-        Player thirdPlayer = new Player("Dmytro", propertyCards.get(3), chanceCards.get(3));
+        Player firstPlayer = new Player("Nazar", List.of(propertyCards.get(1)), List.of(chanceCards.get(1)));
+        Player secondPlayer = new Player("Oleh", List.of(propertyCards.get(2)), List.of(chanceCards.get(2)));
+        Player thirdPlayer = new Player("Dmytro", List.of(propertyCards.get(3)), List.of(chanceCards.get(3)));
         return List.of(firstPlayer, secondPlayer, thirdPlayer);
     }
 }

@@ -20,8 +20,8 @@ public class MonopolyMockitoTest {
     public void GetInfoAboutGame_ReturnsPlayers_Success() {
         game.setPlayers(List.of(player));
         when(player.getName()).thenReturn("Nazar");
-        when(player.getChanceCard()).thenReturn(new ChanceCard());
-        when(player.getPropertyCard()).thenReturn(new PropertyCard());
+        when(player.getChanceCards()).thenReturn(List.of(new ChanceCard()));
+        when(player.getPropertyCards()).thenReturn(List.of(new PropertyCard()));
         Assert.assertEquals(List.of(player), game.getInfoAboutGame());
     }
 }

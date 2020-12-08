@@ -21,8 +21,8 @@ public class PlayerTest {
     @Test
     public void GetInfoAboutPlayer_ReturnsListOfCards_Success() {
         player = new Player("Ihor");
-        player.setPropertyCard(propertyCard);
-        player.setChanceCard(chanceCard);
+        player.setPropertyCards(List.of(propertyCard));
+        player.setChanceCards(List.of(chanceCard));
         when(propertyCard.getDescription()).thenReturn("A street.");
         when(chanceCard.getDescription()).thenReturn("Taxes!");
         Assert.assertEquals(List.of(propertyCard, chanceCard), player.getInfoAboutPlayer());
